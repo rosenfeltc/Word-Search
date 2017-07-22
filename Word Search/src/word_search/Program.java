@@ -20,11 +20,17 @@ public class Program
 		// Initialize and load the puzzle
 		Puzzle puzzle = new Puzzle(rows, columns);
 		puzzle.load(puzzleString);
-		//JOptionPane.showMessageDialog(null, puzzle.display());
+		JOptionPane.showMessageDialog(null, puzzle.puzzleToString());
 		
 		// Ask the user for a String that they want searched in the puzzle
-		String searchWord = JOptionPane.showInputDialog("Please provide a String that you want to search for in the Puzzle: ");
-		searchWord = searchWord.toLowerCase();
+		String word = JOptionPane.showInputDialog("Please provide a String that you want to search for in the Puzzle: ");
+		word = word.toLowerCase();
+		
+		// Search for the word in the puzzle
+		puzzle.search(word);
+		
+		// Display the locations
+		JOptionPane.showMessageDialog(null, puzzle.locatorToString());
 	}
 	
 	// Method that allows the user to load a puzzle and returns the selected File as a String
