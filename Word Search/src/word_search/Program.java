@@ -1,24 +1,28 @@
+/* This is the Program class that contains the main method that is used to run the Word Search program. It allows the user to select
+ * the CSV file which is then loaded to a String in order to calculate the number of rows and columns in the CSV file and it passes it
+ * to the puzzle class to obtain the solution as a String.
+ * Coded by Christopher Rosenfelt for CSI 213
+ */
 package word_search;
 
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Program extends JFrame
+public class Program
 {
 	public static void main(String[] args)
 	{
-		// Load the puzzle and store it as a String
+		// Open the puzzle and store it as a String
 		String puzzleString = loadPuzzle();
 		
 		//Figure out how many rows and columns are in the puzzle
 		int rows = puzzleRows(puzzleString);
 		int columns = puzzleColumns(puzzleString);
 		
-		// Ask the user for how many words they want to search for - maximum is 4
+		// Ask the user for how many words they want to search for (maximum is 4)
 		int numberOfWords;
 		do
 		{
@@ -34,7 +38,8 @@ public class Program extends JFrame
 		Puzzle puzzle = new Puzzle(rows, columns, numberOfWords);
 		puzzle.load(puzzleString);
 		
-		// Ask the user for the words
+		// Ask the user for the words and store them in puzzle.java through the use of the addWord 
+		// method for later searching
 		if(numberOfWords != 0)
 		{
 			if(numberOfWords == 1)
@@ -53,23 +58,31 @@ public class Program extends JFrame
 					puzzle.addWord(word, i);
 				}
 			}
-		}
+		}//END IF STATEMENT
 		
-		// Solve the puzzle
+		// Solve the puzzle and store the result in a String
 		String solved = puzzle.solve();
 		
+		// Display the solved puzzle in a Dialog box
 		JOptionPane.showMessageDialog(null, solved);
-	}
+		
+		// Display the solved puzzle in a Window
+		Window wordSearch = new Window(rows,columns);
+		wordSearch.addText(solved);
+	}//END MAIN
 	
-	// Method that allows the user to load a puzzle and returns the selected File as a String
+	// Method that allows the user to select and open a CSV File and returns the selected File as a String
 	public static String loadPuzzle()
 	{
+		// Create String that will ultimately store the File
 		String fileString = new String();
 		
+		// Create a JFileChooser object to open the file in openFile
 		JFileChooser chooseFile = new JFileChooser();
 		chooseFile.showOpenDialog(chooseFile);
 		File openFile = chooseFile.getSelectedFile();
 		
+		// Read the File with Scanner and store the contents of the File as a String
 		try
 		{
 			Scanner fileScanner = new Scanner(openFile);
@@ -87,14 +100,17 @@ public class Program extends JFrame
 		}
 		
 		return fileString;
-	}
+	}// END loadPuzzle
 	
 	// Method that calculates how many rows are in a CSV-type String
 	public static int puzzleRows(String puzzleString)
 	{
+		// Variables needed to count how many rows are in the CSV-type String
 		int count = 0;
 		int length = puzzleString.length();
 		
+		// Iterate through every Char in the String while updating
+		// counter when a newline Char is found
 		for(int i = 0; i < length; i++)
 		{
 			if(puzzleString.charAt(i) == '\n')
@@ -104,14 +120,17 @@ public class Program extends JFrame
 		}
 		
 		return count;
-	}
+	}// END puzzleRows
 	
 	// Method that calculates how many columns are in a CSV-type String
 	public static int puzzleColumns(String puzzleString)
 	{
+		// Variables needed to count how many columns are in the CSV-type String
 		int count = 0;
 		int index = 0;
 		
+		// Iterate just through the first row and updating count every
+		// time a letter is found (ignoring commas)
 		while(puzzleString.charAt(index) != '\n')
 		{
 			if(puzzleString.charAt(index) != ',')
@@ -122,5 +141,5 @@ public class Program extends JFrame
 		}
 		
 		return count;
-	}
-}
+	}// End puzzleColumns
+}// END Program class
