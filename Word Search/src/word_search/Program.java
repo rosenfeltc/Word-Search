@@ -2,11 +2,12 @@ package word_search;
 
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Program 
+public class Program extends JFrame
 {
 	public static void main(String[] args)
 	{
@@ -17,20 +18,54 @@ public class Program
 		int rows = puzzleRows(puzzleString);
 		int columns = puzzleColumns(puzzleString);
 		
+		// Ask the user for how many words they want to search for - maximum is 4
+		int numberOfWords;
+		do
+		{
+			numberOfWords = Integer.parseInt(JOptionPane.showInputDialog("How many words would you like to search for in the puzzle (Maximum is 4): "));
+			if(numberOfWords < 0 || numberOfWords > 4)
+			{
+				JOptionPane.showMessageDialog(null, "Invalid number entered! Please enter an integer from 0 to 4");
+			}
+			
+		} while(numberOfWords < 0 || numberOfWords > 4);
+			
 		// Initialize and load the puzzle
-		Puzzle puzzle = new Puzzle(rows, columns);
+		Puzzle puzzle = new Puzzle(rows, columns, numberOfWords);
 		puzzle.load(puzzleString);
-		JOptionPane.showMessageDialog(null, puzzle.puzzleToString());
 		
-		// Ask the user for a String that they want searched in the puzzle
-		String word = JOptionPane.showInputDialog("Please provide a String that you want to search for in the Puzzle: ");
-		word = word.toLowerCase();
+		// Ask the user for the words
+		if(numberOfWords != 0)
+		{
+			if(numberOfWords == 1)
+			{
+				String word = JOptionPane.showInputDialog("Please provide the word that you want to search for in the Puzzle: ");
+				word = word.toLowerCase();
+				puzzle.addWord(word, numberOfWords);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Please provide the words that you want to search for in the Puzzle: ");
+				for (int i = 1; i <= numberOfWords; i++)
+				{
+					String word = JOptionPane.showInputDialog("Please provide word number " + i + ": ");
+					word = word.toLowerCase();
+					puzzle.addWord(word, i);
+				}
+			}
+		}
 		
-		// Search for the word in the puzzle
-		puzzle.search(word);
-		
-		// Display the locations
-		JOptionPane.showMessageDialog(null, puzzle.locatorToString());
+		// Solve the puzzle
+		String solved;
+		if(numberOfWords == 0)
+		{
+			solved = puzzleString;
+		}
+		else
+		{
+			solved = puzzle.solve();
+		}
+		JOptionPane.showMessageDialog(null, solved);
 	}
 	
 	// Method that allows the user to load a puzzle and returns the selected File as a String

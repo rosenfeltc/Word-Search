@@ -3,15 +3,21 @@ package word_search;
 public class Puzzle 
 {
 	private char[][] puzzle;
+	private int[][] solvedPuzzle;
+	private String[] words;
+	private int numberOfWords;
 	private int rows;
 	private int columns;
 	private int[][] locator;
 	
-	public Puzzle(int r, int c)
+	public Puzzle(int r, int c, int n)
 	{
 		rows = r;
 		columns = c;
 		puzzle = new char[rows][columns];
+		solvedPuzzle = new int[rows][columns];
+		words = new String[n + 1];
+		numberOfWords = n;
 	}
 	
 	// Method that loads the puzzle into a 2D char array from a string
@@ -43,12 +49,57 @@ public class Puzzle
 		}
 	}
 	
+	public String solve()
+	{
+		for(int i = 1; i <= numberOfWords; i++)
+		{
+			if(search(words[i]))
+			{
+				addToPuzzle(i);
+			}
+		}
+		/////////////////////////
+		String solution = "";
+		for(int i = 0; i < rows; i++)
+		{
+			for(int j = 0; j < columns; j++)
+			{
+				solution += "|" + solvedPuzzle[i][j] + '|';
+			}
+			solution += "\n";
+		}
+		
+		return solution;
+	}
+	
+	public void addToPuzzle(int index)
+	{
+		for(int i = 0; i < locator.length; i++)
+		{
+			int r = locator[i][0];
+			int c = locator[i][1];
+			if(solvedPuzzle[r][c] != 0)
+			{
+				solvedPuzzle[r][c] = numberOfWords + 1;
+			}
+			else
+			{
+				solvedPuzzle[r][c] = index;
+			}
+		}
+	}
+	
+	public void addWord(String word, int index)
+	{
+		this.words[index] = word;
+	}
+	
 	private void initializeLocator(String word)
 	{
 		locator = new int[word.length()][2];
 	}
 	// Method that searches the word inside the puzzle
-	public void search(String word)
+	public boolean search(String word)
 	{
 		initializeLocator(word);
 		int counter = 0;
@@ -80,6 +131,8 @@ public class Puzzle
 				break;
 			}
 		}
+		
+		return found;
 	}
 	
 	private boolean recursiveSearch(String word, int i, int j, int counter)
