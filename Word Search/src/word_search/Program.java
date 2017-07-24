@@ -56,15 +56,8 @@ public class Program extends JFrame
 		}
 		
 		// Solve the puzzle
-		String solved;
-		if(numberOfWords == 0)
-		{
-			solved = puzzleString;
-		}
-		else
-		{
-			solved = puzzle.solve();
-		}
+		String solved = puzzle.solve();
+		
 		JOptionPane.showMessageDialog(null, solved);
 	}
 	

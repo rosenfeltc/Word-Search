@@ -9,6 +9,7 @@ public class Puzzle
 	private int rows;
 	private int columns;
 	private int[][] locator;
+	private final String[] colors;
 	
 	public Puzzle(int r, int c, int n)
 	{
@@ -18,6 +19,14 @@ public class Puzzle
 		solvedPuzzle = new int[rows][columns];
 		words = new String[n + 1];
 		numberOfWords = n;
+		
+		// Add the colors for highlighting
+		colors = new String[5];
+		colors[0] = "<span style=\"background-color: #0000ff\">";
+		colors[1] = "<span style=\"background-color: #ff0000\">";
+		colors[2] = "<span style=\"background-color: #00ff00\">";
+		colors[3] = "<span style=\"background-color: #ffa500\">";
+		colors[4] = "<span style=\"background-color: #ffff00\">";
 	}
 	
 	// Method that loads the puzzle into a 2D char array from a string
@@ -58,16 +67,8 @@ public class Puzzle
 				addToPuzzle(i);
 			}
 		}
-		/////////////////////////
-		String solution = "";
-		for(int i = 0; i < rows; i++)
-		{
-			for(int j = 0; j < columns; j++)
-			{
-				solution += "|" + solvedPuzzle[i][j] + '|';
-			}
-			solution += "\n";
-		}
+		// Obtain the puzzle solution
+		String solution = toString();
 		
 		return solution;
 	}
@@ -316,16 +317,38 @@ public class Puzzle
 	}
 	
 	// Method that returns the 2D char array as a string
-	public String puzzleToString()
+	public String toString()
 	{
 		String puzzleString = "";
 		
 		for(int i = 0; i < rows; i++)
 		{
+			puzzleString += "<html><font face=\"Comic Sans MS\" size=24>";
 			for(int j = 0; j < columns; j++)
 			{
-				puzzleString += puzzle[i][j];
+				puzzleString += "|";
+				if(solvedPuzzle[i][j] == 0)
+				{
+					puzzleString += puzzle[i][j];
+				}
+				else
+				{
+					if(solvedPuzzle[i][j] == 5)
+					{
+						puzzleString += colors[0];
+						puzzleString += puzzle[i][j];
+						puzzleString += "</span>";
+					}
+					else
+					{
+						puzzleString += colors[solvedPuzzle[i][j]];
+						puzzleString += puzzle[i][j];
+						puzzleString += "</span>";
+					}
+				}
+				puzzleString+= "|";
 			}
+			puzzleString +="</font></html>";
 			puzzleString += "\n";
 		}
 		
