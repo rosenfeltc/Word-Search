@@ -63,11 +63,8 @@ public class Program
 		// Solve the puzzle and store the result in a String
 		String solved = puzzle.solve();
 		
-		// Display the solved puzzle in a Dialog box
-		JOptionPane.showMessageDialog(null, solved);
-		
 		// Display the solved puzzle in a Window
-		Window wordSearch = new Window(rows,columns);
+		Window wordSearch = new Window();
 		wordSearch.addText(solved);
 	}//END MAIN
 	

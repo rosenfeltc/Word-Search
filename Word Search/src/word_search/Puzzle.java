@@ -31,11 +31,11 @@ public class Puzzle
 		
 		// Add the colors that will be used for highlighting the found words
 		colors = new String[5];
-		colors[0] = "<span style=\"background-color: #0000ff\">";
-		colors[1] = "<span style=\"background-color: #ff0000\">";
-		colors[2] = "<span style=\"background-color: #00ff00\">";
-		colors[3] = "<span style=\"background-color: #ffa500\">";
-		colors[4] = "<span style=\"background-color: #ffff00\">";
+		colors[0] = "<TD BGCOLOR =#0000FF><FONT SIZE=6><CENTER>"; // blue
+		colors[1] = "<TD BGCOLOR =#FF0000><FONT SIZE=6><CENTER>"; // red
+		colors[2] = "<TD BGCOLOR =#00FF00><FONT SIZE=6><CENTER>"; // green
+		colors[3] = "<TD BGCOLOR =#FFA500><FONT SIZE=6><CENTER>"; // orange
+		colors[4] = "<TD BGCOLOR =#FFFF00><FONT SIZE=6><CENTER>"; // yellow
 	}// END Constructor
 	
 	// Method that loads the puzzle into a 2D char array from a string
@@ -408,19 +408,19 @@ public class Puzzle
 	private String solvedToString()
 	{
 		// Declare the string to store the solved puzzle and initialize it with required font
-		String puzzleString = "<html><font face=\"Comic Sans MS\" size=24>";
+		String puzzleString = "<HTML><BODY><TABLE BORDER=1>";
 		
 		// Iterate through the puzzle checking solvedPuzzle to verify if the current location
 		// contains a found word and highlight with the appropriate index if so, otherwise
 		// no highlighting necessary
 		for(int i = 0; i < rows; i++)
 		{
+			puzzleString += "<TR>";
 			for(int j = 0; j < columns; j++)
 			{
-				puzzleString += "|";
 				if(solvedPuzzle[i][j] == 0)
 				{
-					puzzleString += puzzle[i][j];
+					puzzleString += "<TD><FONT SIZE=6><CENTER>" + puzzle[i][j] + "</CENTER></FONT></TD>";
 				}
 				else
 				{
@@ -428,21 +428,17 @@ public class Puzzle
 					// the 0 index location in colors which is blue
 					if(solvedPuzzle[i][j] == 5)
 					{
-						puzzleString += colors[0];
-						puzzleString += puzzle[i][j];
-						puzzleString += "</span>";
+						puzzleString += colors[0] + puzzle[i][j] + "</CENTER></FONT></TD>";
 					}
 					else
 					{
-						puzzleString += colors[solvedPuzzle[i][j]];
-						puzzleString += puzzle[i][j];
-						puzzleString += "</span>";
+						puzzleString += colors[solvedPuzzle[i][j]] + puzzle[i][j] + "</CENTER></FONT></TD>";
 					}
 				}
-				puzzleString+= "|";
 			}
-			puzzleString += "<br>";
+			puzzleString += "</TR>";
 		}
+		puzzleString += "</TABLE></BODY></HTML>";
 		
 		return puzzleString;
 	}//END solvedToString
