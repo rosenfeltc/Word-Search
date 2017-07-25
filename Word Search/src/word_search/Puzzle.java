@@ -18,16 +18,14 @@ public class Puzzle
 	private final String[] colors;
 	
 	// Puzzle constructor that takes an integer for the number of rows,
-	// an integer for the number of columns, and an integer for the number
-	// of words that will be searched
-	public Puzzle(int r, int c, int n)
+	// an integer for the number of columns
+	public Puzzle(int r, int c)
 	{
 		rows = r;
 		columns = c;
-		numberOfWords = n;
+		numberOfWords = 0;
 		puzzle = new char[rows][columns];
 		solvedPuzzle = new int[rows][columns];
-		words = new String[n + 1]; // Plus 1 because later on we will be storing words in their appropriate index so 0 index will be null
 		
 		// Add the colors that will be used for highlighting the found words
 		colors = new String[5];
@@ -71,6 +69,14 @@ public class Puzzle
 			}
 		}
 	}// END load
+	
+	// Method that initializes the fields that are important to find the words that will be inputted by the user
+	public void initializeWords(int number)
+	{
+		numberOfWords = number;
+		words = new String[number + 1]; // Plus 1 because later on we will be storing words in their appropriate index so 0 index will be null
+		
+	}
 	
 	// Method that essentially stores the words provided by the user in
 	// the main method of Program.java into a String array
@@ -442,4 +448,26 @@ public class Puzzle
 		
 		return puzzleString;
 	}//END solvedToString
+	
+	// Overrides the toString() method and provides the proper table format of 
+	// 2D char array as a string
+	public String toString()
+	{
+		// Declare the string to store the unsolved puzzle and initialize it with 
+		String puzzleString = "<HTML><BODY><TABLE BORDER=1>";
+				
+		// Iterate through the puzzle creating the appropriate string
+		for(int i = 0; i < rows; i++)
+		{
+			puzzleString += "<TR>";
+			for(int j = 0; j < columns; j++)
+			{
+				puzzleString += "<TD><FONT SIZE=6><CENTER>" + puzzle[i][j] + "</CENTER></FONT></TD>";
+			}
+			puzzleString += "</TR>";
+		}
+		puzzleString += "</TABLE></BODY></HTML>";
+				
+		return puzzleString;
+	}
 }//END Puzzle Class
