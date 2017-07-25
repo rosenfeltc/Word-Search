@@ -1,6 +1,6 @@
 /* This is the Puzzle class that stores all the variables and performs all of the methods related to the Word Search puzzle:
  * from loading the Puzzle into an array of Chars, storing the words provided by the user, to searching those words in the puzzle and
- * highlighting them in the final solution returned as a String to the main method in the program class.
+ * highlighting them in the final solution returned as a String to the program class.
  * Coded by Christopher Rosenfelt for CSI 213
  */
 package word_search;
@@ -51,17 +51,21 @@ public class Puzzle
 		// or a newline escape char
 		while(index < length)
 		{
+			// Ignore commas so as to not place them in the 2D char array
 			if(puzzleString.charAt(index) == ',')
 			{
 				j++;
 				index++;
 			}
+			// Do not place the newline char into the 2D array, instead update i and j
+			// as if we are moving into a new row
 			else if(puzzleString.charAt(index) == '\n')
 			{
 				i++;
 				j = 0;
 				index++;
 			}
+			// Place the current char into the 2D char array
 			else
 			{
 				puzzle[i][j] = puzzleString.charAt(index);
@@ -74,7 +78,9 @@ public class Puzzle
 	public void initializeWords(int number)
 	{
 		numberOfWords = number;
-		words = new String[number + 1]; // Plus 1 because later on we will be storing words in their appropriate index so 0 index will be null
+		// number + plus 1 is the size because later on we will be 
+		// storing words in their appropriate index so 0 index will be null
+		words = new String[number + 1];
 		
 	}
 	
@@ -82,7 +88,7 @@ public class Puzzle
 	// the main method of Program.java into a String array
 	public void addWord(String word, int index)
 	{
-		this.words[index] = word;
+		words[index] = word;
 	}// END addWord
 	
 	// Method that will ultimately solve the word search by returning a string
@@ -108,36 +114,6 @@ public class Puzzle
 		return solution;
 	}// END solve
 	
-	// Method that uses the location of the found words
-	// to add its index to solvedPuzzle for later usage
-	private void addToPuzzle(int index)
-	{
-		// Iterate through the chars of the found word
-		// storing the location of each char with its appropriate index
-		// in solvedPuzzle for later usage
-		for(int i = 0; i < locator.length; i++)
-		{
-			// Store the x and y location of char and compare it to solvedPuzzle
-			// to store the appropriate index for later usage
-			int r = locator[i][0];
-			int c = locator[i][1];
-			
-			// If it's not zero then a different word has a Char there
-			// so it will be shared and later highlighted with Blue so
-			// adjust accordingly
-			if(solvedPuzzle[r][c] != 0)
-			{
-				solvedPuzzle[r][c] = 5;
-			}
-			else
-			{
-				// Match that location with the current word
-				// through its own index
-				solvedPuzzle[r][c] = index;
-			}
-		}
-	}// END addToPuzzle
-	
 	// Method called by the search method that creates and initializes
 	// a 2D integer array that will be used to store the locations of all
 	// the chars from the found word
@@ -146,12 +122,12 @@ public class Puzzle
 		locator = new int[word.length()][2];
 	} //END initializeLocator
 	
-	// Method that searches the word inside the puzzle
-	// iterates through all the puzzle and uses the recursiveSearch
-	// method to attempt to find the word
+	// Method that searches the word inside the word search
+	// iterates through each element in the 2D char array and uses
+	// the recursiveSearch method to attempt to find the word
 	private boolean search(String word)
 	{
-		// Initialize the words locator and other variables that will
+		// Initialize the word's locator and other variables that will
 		// be needed to attempt to find the word
 		initializeLocator(word);
 		int counter = 0;
@@ -198,10 +174,10 @@ public class Puzzle
 	// and calling itself while passing the word version of itself minus its first letter
 	private boolean recursiveSearch(String word, int i, int j, int counter)
 	{	
-		// Set the default as the first char of the word has not been yet found
+		// Set the default to false as the first char of the word has not been yet found
 		boolean found = false;
 		
-		// If we reached here then all the characters in the word were found so return true
+		// BASE CASE - If we reached here then all the characters in the word were found so return true
 		if(word.length() == 0)
 		{
 			return true;
@@ -223,7 +199,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i-1);
@@ -248,7 +224,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i-1);
@@ -273,7 +249,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i-1);
@@ -298,7 +274,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i);
@@ -323,7 +299,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i+1);
@@ -348,7 +324,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i+1);
@@ -373,7 +349,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i+1);
@@ -398,7 +374,7 @@ public class Puzzle
 				}
 			}
 			// If the location of the char hasn't been used before, then use it now by storing it in locator
-			//  and recursively calling the function to search for the next char in the word
+			// and recursively calling the function to search for the next char in the word
 			if(!used)
 			{
 				locator[counter][0] = (i);
@@ -410,10 +386,40 @@ public class Puzzle
 		return found;
 	}//END recursiveSearch
 	
+	// Method that uses the location of the found words
+	// to add its index to solvedPuzzle for later usage
+	private void addToPuzzle(int index)
+	{
+		// Iterate through the chars of the found word
+		// storing the location of each char with its appropriate index
+		// in solvedPuzzle for later usage
+		for(int i = 0; i < locator.length; i++)
+		{
+			// Store the x and y location of char and compare it to solvedPuzzle
+			// to store the appropriate index for later usage
+			int r = locator[i][0];
+			int c = locator[i][1];
+				
+			// If it's not zero then a different word has a char there
+			// so it will be shared and later highlighted with Blue so
+			// adjust accordingly
+			if(solvedPuzzle[r][c] != 0)
+			{
+				solvedPuzzle[r][c] = 5;
+			}
+			else
+			{
+				// Match that location with the current word
+				// through its own index
+				solvedPuzzle[r][c] = index;
+			}
+		}
+	}// END addToPuzzle
+	
 	// Method that returns the 2D char array as a string with the found words highlighted
 	private String solvedToString()
 	{
-		// Declare the string to store the solved puzzle and initialize it with required font
+		// Declare the string to store the solved puzzle and initialize it with required html code for a table
 		String puzzleString = "<HTML><BODY><TABLE BORDER=1>";
 		
 		// Iterate through the puzzle checking solvedPuzzle to verify if the current location
@@ -421,11 +427,14 @@ public class Puzzle
 		// no highlighting necessary
 		for(int i = 0; i < rows; i++)
 		{
+			// New table row
 			puzzleString += "<TR>";
 			for(int j = 0; j < columns; j++)
 			{
+				// No highlighting necessary as this element doesn't contain any of our words
 				if(solvedPuzzle[i][j] == 0)
 				{
+					// Each element is it's own column, with the appropriate font size
 					puzzleString += "<TD><FONT SIZE=6><CENTER>" + puzzle[i][j] + "</CENTER></FONT></TD>";
 				}
 				else
@@ -434,10 +443,14 @@ public class Puzzle
 					// the 0 index location in colors which is blue
 					if(solvedPuzzle[i][j] == 5)
 					{
+						// Each element is it's own column, with the appropriate font size
 						puzzleString += colors[0] + puzzle[i][j] + "</CENTER></FONT></TD>";
 					}
+					// This is a location that is specific to only one of our words so use that
+					// words specific index to obtain the appropriate highlight color for the cell
 					else
 					{
+						// Each element is it's own column, with the appropriate font size
 						puzzleString += colors[solvedPuzzle[i][j]] + puzzle[i][j] + "</CENTER></FONT></TD>";
 					}
 				}
@@ -450,10 +463,10 @@ public class Puzzle
 	}//END solvedToString
 	
 	// Overrides the toString() method and provides the proper table format of 
-	// 2D char array as a string
+	// 2D char array as a string. Used for displaying the unsolved word search
 	public String toString()
 	{
-		// Declare the string to store the unsolved puzzle and initialize it with 
+		// Declare the string to store the unsolved puzzle and initialize it with the appropriate html code for a table
 		String puzzleString = "<HTML><BODY><TABLE BORDER=1>";
 				
 		// Iterate through the puzzle creating the appropriate string
